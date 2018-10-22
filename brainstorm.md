@@ -17,3 +17,21 @@
   * Artsy
 * Art
   * Artsy
+
+## Components
+
+* Painting
+  * Current
+  * Previous
+  * Next
+  * Pre-previous (not rendered)
+  * Post-next (not rendered)
+* Scroll Arrow
+  * Left (previous)
+  * Right (next)
+* Plaque
+* Background
+* YT Player
+* Search
+  * Background
+  * Artwork
