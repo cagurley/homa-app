@@ -1,12 +1,20 @@
 import React from 'react';
-import * as lib from './lib.js';
+import PropTypes from 'prop-types';
+import Artwork from './Artwork';
 
-const state = {
-  artworks: lib.getArtworks()
-};
+const Collection = props => {
 
-setTimeout(() => console.log(state.artworks), 3000);
+  return (
+    <div>
+      {props.artworks.map(artwork =>
+        <Artwork key={artwork.id} source={artwork.href} />
+      )}
+    </div>
+  );
+}
 
-const Collection = () => {state.artworks.forEach(artwork => <img src={artwork} alt='artwork' />)};
+Collection.propTypes = {
+  artworks: PropTypes.array.isRequired
+}
 
 export default Collection;
