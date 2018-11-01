@@ -12,115 +12,105 @@ class App extends Component {
 
   componentDidMount() {
     const https = require('https');
-    return new Promise(function(resolve, reject){
-      const postData = JSON.stringify({
-        client_id: '222bdcb377a9adbe79ef',
-        client_secret: '23fe80d083839ae0b4b0b1445673c4a4'
-      });
-      const tokenOptions = {
-        hostname: 'api.artsy.net',
-        method: 'POST',
-        path: '/api/tokens/xapp_token',
+    const postData = JSON.stringify({
+      client_id: '222bdcb377a9adbe79ef',
+      client_secret: '23fe80d083839ae0b4b0b1445673c4a4'
+    });
+    const tokenOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: postData
+    };
+
+    return fetch(
+      'https://api.artsy.net/api/tokens/xapp_token',
+      tokenOptions
+    ).then(res => {
+      console.log('statusCode:', res.status);
+      res.headers.forEach(header => console.log('header:', header));
+      return res.json();
+     }).catch(
+       e => console.error(`problem with request: ${e.message}`)
+     ).then(json => {
+       console.log(json);
+       return new Promise((resolve, reject) => resolve(json.token));
+     })
+    .then(token => {
+      const getOptions = {
         headers: {
-          'Content-Type': 'application/json'
+          'X-Xapp-Token': token,
+          'Accept': 'application/vnd.artsy-v2+json'
         }
       };
-
-      const req = https.request(tokenOptions, (res) => {
-        console.log('statusCode:', res.statusCode);
-        console.log('headers:', res.headers);
-        let body = '';
-        res.on('data', chunk => body+=chunk)
-           .on('end', () => {
-              body = JSON.parse(body);
-              const XAPPToken = body.token;
-              resolve(XAPPToken);
-           });
-      }).on('error', e => console.error(`problem with request: ${e.message}`));
-      req.write(postData);
-      req.end();
-    }).then(token => {
-      return new Promise((resolve, reject) => {
-        const getOptions = {
-          hostname: 'api.artsy.net',
-          path: `/api/artists/edouard-manet`,
-          headers: {
-            'X-Xapp-Token': token,
-            'Accept': 'application/vnd.artsy-v2+json'
-          }
-        };
-        console.log(getOptions.headers["X-Xapp-Token"]);
-        https.get(getOptions, (res) => {
-          console.log('statusCode:', res.statusCode);
-          console.log('headers:', res.headers);
-          let body = ''
-          res.on('data', chunk => body+=chunk)
-             .on('end', () => {
-                body = JSON.parse(body);
-                const artist_id = body.id;
-                resolve([token, artist_id]);
-             });
-        }).on('error', (e) => {
-          console.error(e);
-        });
-      })
-    }).then(tai => {
-      return new Promise((resolve, reject) => {
+      return fetch('https://api.artsy.net/api/artists/edouard-manet', getOptions)
+      .then(res => {
+        console.log('statusCode:', res.status);
+        res.headers.forEach(header => console.log('header:', header));
+        return res.json();
+      }).catch(
+        e => console.error(e)
+      ).then(json => {
+        console.log(json.id);
+        console.log(token);
+        const artist_id = json.id;
+        return [token, artist_id];
+      }).then(tai => {
         const [token, artist_id] = tai;
         const getOptions = {
-          hostname: 'api.artsy.net',
-          path: `/api/artists/${artist_id}`,
           headers: {
             'X-Xapp-Token': token,
             'Accept': 'application/vnd.artsy-v2+json'
           }
         };
-        https.get(getOptions, (res) => {
-          console.log('statusCode:', res.statusCode);
-          console.log('headers:', res.headers);
-          let body = ''
-          res.on('data', chunk => body+=chunk)
-             .on('end', () => {
-                body = JSON.parse(body);
-                const regex = /.*\/(.*?)$/;
-                const artworks = body._links.artworks.href.match(regex)[1];
-               resolve([token, artworks]);
-             });
-        }).on('error', (e) => {
-          console.error(e);
-        });
+        fetch(
+          `https://api.artsy.net/api/artists/${artist_id}`,
+          getOptions
+        ).then(res => {
+          console.log('statusCode:', res.status);
+          res.headers.forEach(header => console.log('header:', header));
+          return res.json();
+        }).catch(
+          e => console.error(e)
+        ).then(json => {
+          const regex = /.*\/(.*?)$/;
+          const artworks = json._links.artworks.href.match(regex)[1];
+          return [token, artworks];
+        })
       })
-    }).then(taw => {
-        const [token, artworks] = taw;
-        const getOptions = {
-          hostname: 'api.artsy.net',
-          path: `/api/${artworks}`,
-          headers: {
-            'X-Xapp-Token': token,
-            'Accept': 'application/vnd.artsy-v2+json'
-          }
-        };
-        https.get(getOptions, (res) => {
-          console.log('statusCode:', res.statusCode);
-          console.log('headers:', res.headers);
-          let body = ''
-          res.on('data', chunk => body+=chunk)
-             .on('end', () => {
-                body = JSON.parse(body);
-                let artworks = [];
-                body._embedded.artworks.forEach(artwork => {
-                  const id = artwork.id;
-                  const image_version = artwork.image_versions[0];
-                  const href = artwork._links.image.href.replace('{image_version}', image_version);
-                  artworks.push({id, href});
-                });
-                console.log(artworks);
-                this.setState({artworks});
-             });
-        }).on('error', (e) => {
-          console.error(e);
-        });
-    });
+    })
+    // .then(taw => {
+    //     const [token, artworks] = taw;
+    //     const getOptions = {
+    //       hostname: 'api.artsy.net',
+    //       path: `/api/${artworks}`,
+    //       headers: {
+    //         'X-Xapp-Token': token,
+    //         'Accept': 'application/vnd.artsy-v2+json'
+    //       }
+    //     };
+    //     https.get(getOptions, (res) => {
+    //       console.log('statusCode:', res.statusCode);
+    //       console.log('headers:', res.headers);
+    //       let body = ''
+    //       res.on('data', chunk => body+=chunk)
+    //          .on('end', () => {
+    //             body = JSON.parse(body);
+    //             let artworks = [];
+    //             body._embedded.artworks.forEach(artwork => {
+    //               const id = artwork.id;
+    //               const image_version = artwork.image_versions[0];
+    //               const href = artwork._links.image.href.replace('{image_version}', image_version);
+    //               artworks.push({id, href});
+    //             });
+    //             console.log(artworks);
+    //             this.setState({artworks});
+    //          });
+    //     }).on('error', (e) => {
+    //       console.error(e);
+    //     });
+    // });
   }
 
   render() {
