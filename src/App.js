@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import ArtistSearch from './ArtistSearch';
 import Collection from './Collection';
 
 class App extends Component {
@@ -9,13 +10,14 @@ class App extends Component {
       string: '',
       expiration: Date.now()
     },
+    artist_name: 'edouard-manet',
     artworks: []
   }
 
   getToken() {console.log(this.state.token.expiration, this.state.token.expiration < Date.now());
     const postData = JSON.stringify({
-      client_id: '222bdcb377a9adbe79ef',
-      client_secret: '23fe80d083839ae0b4b0b1445673c4a4'
+      client_id: process.env.REACT_APP_CLIENT_ID,
+      client_secret: process.env.REACT_APP_CLIENT_SECRET
     });
     const tokenOptions = {
       method: 'POST',
@@ -42,10 +44,11 @@ class App extends Component {
           expiration: new Date(json.expires_at)
         }
       });
+      return 'MESSAGE!';
     });
   }
 
-  getArtistId (token) {console.log(this.state.token.expiration, this.state.token.expiration < Date.now());
+  getArtistId (token, artist_name) {console.log(this.state.token.expiration, this.state.token.expiration < Date.now());
     const getOptions = {
       method: 'GET',
       headers: {
@@ -55,7 +58,7 @@ class App extends Component {
     };
 
     return fetch(
-     'https://api.artsy.net/api/artists/edouard-manet',
+     `https://api.artsy.net/api/artists/${artist_name}`,
      getOptions
     ).then(res => {
      console.log('statusCode:', res.status);
@@ -127,11 +130,32 @@ class App extends Component {
     });
   }
 
-  componentDidMount() {
-    return this.getToken()
-      .then(token => this.getArtistId(this.state.token.string))
-      .then(artist_id => this.getArtworks(this.state.token.string, artist_id))
+  updateArtist = () => {
+    let artist_name = document.getElementById('artist-search').value;
+    artist_name = artist_name.replace(/[\s_]+/, '-');
+    console.log(artist_name);
+    this.setState({artist_name});
+    this.getToken()
+      .then(message => {
+        console.log(message);
+        return this.getArtistId(this.state.token.string, this.state.artist_name);
+      })
+      .then(artist_id => {
+        console.log("AID:", artist_id);
+        return this.getArtworks(this.state.token.string, artist_id)
+      })
       .then(artworks => this.setArtworks(this.state.token.string, artworks));
+  }
+
+  componentDidMount() {
+    const prom = this.getToken()
+      .then(message => {
+        console.log(message);
+        return this.getArtistId(this.state.token.string, this.state.artist_name);
+      })
+      .then(artist_id => this.getArtworks(this.state.token.string, artist_id))
+      .then(artworks => this.setArtworks(this.state.token.string, artworks))
+    return prom;
   }
 
   render() {
@@ -139,7 +163,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+          {/*<img src={logo} className="App-logo" alt="logo" />
           <p>
             Edit <code>src/App.js</code> and save to reload.
           </p>
@@ -150,8 +174,9 @@ class App extends Component {
             rel="noopener noreferrer"
           >
             Learn React
-          </a>
-          <Collection artworks={this.state.artworks}/>
+          </a>*/}
+          <ArtistSearch handleArtistUpdate={this.updateArtist} />
+          <Collection artworks={this.state.artworks} />
         </header>
       </div>
     );
