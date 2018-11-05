@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
+import ErrorMessage from './ErrorMessage';
 import ArtistSearch from './ArtistSearch';
 import Collection from './Collection';
 
@@ -10,45 +11,61 @@ class App extends Component {
       string: '',
       expiration: Date.now()
     },
-    artist_name: 'edouard-manet',
-    artworks: []
+    artist: {
+      name: 'edouard-manet',
+      id: ''
+    },
+    collection: {
+      uri: '',
+      artworks: []
+    },
+    error: ''
   }
 
-  getToken() {console.log(this.state.token.expiration, this.state.token.expiration < Date.now());
-    const postData = JSON.stringify({
-      client_id: process.env.REACT_APP_CLIENT_ID,
-      client_secret: process.env.REACT_APP_CLIENT_SECRET
-    });
-    const tokenOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: postData
-    };
-
-    return fetch(
-      'https://api.artsy.net/api/tokens/xapp_token',
-      tokenOptions
-    ).then(res => {
-      console.log('statusCode:', res.status);
-      res.headers.forEach(header => console.log('header:', header));
-      return res.json();
-    }).catch(
-     e => console.error(`problem with request: ${e.message}`)
-    ).then(json => {
-      console.log(json);
-      this.setState({
-        token: {
-          string: json.token,
-          expiration: new Date(json.expires_at)
-        }
+  getToken() {
+    // console.log(this.state.token, this.state.token.expiration < Date.now());
+    if (this.state.token.expiration - Date.now() < 86400000) {
+      const postData = JSON.stringify({
+        client_id: process.env.REACT_APP_CLIENT_ID,
+        client_secret: process.env.REACT_APP_CLIENT_SECRET
       });
-      return 'MESSAGE!';
-    });
+      const tokenOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: postData
+      };
+
+      return fetch(
+        'https://api.artsy.net/api/tokens/xapp_token',
+        tokenOptions
+      ).then(res => {
+        // console.log('statusCode:', res.status);
+        // res.headers.forEach(header => console.log('header:', header));
+        return Promise.all([res.status, res.json()]);
+      }).catch(
+       e => console.error(`problem with request: ${e.message}`)
+      ).then(sj => {
+        const [status, json] = sj;
+        // console.log(status, json);
+        if (status === 201) {
+          this.setState(prevState => ({
+            token: {
+              string: json.token,
+              expiration: new Date(json.expires_at)
+            }
+          }));
+        }
+        // console.log(this.state.token);
+        return status;
+      });
+    } else {
+      return Promise.resolve(true);
+    }
   }
 
-  getArtistId (token, artist_name) {console.log(this.state.token.expiration, this.state.token.expiration < Date.now());
+  getArtistId (token, artistName) {
     const getOptions = {
       method: 'GET',
       headers: {
@@ -58,23 +75,31 @@ class App extends Component {
     };
 
     return fetch(
-     `https://api.artsy.net/api/artists/${artist_name}`,
+     `https://api.artsy.net/api/artists/${artistName}`,
      getOptions
     ).then(res => {
-     console.log('statusCode:', res.status);
-     res.headers.forEach(header => console.log('header:', header));
-     return res.json();
+     // console.log('statusCode:', res.status);
+     // res.headers.forEach(header => console.log('header:', header));
+     return Promise.all([res.status, res.json()]);
     }).catch(
      e => console.error(e)
-    ).then(json => {
-     console.log(json.id);
-     console.log(token);
-     const artist_id = json.id;
-     return artist_id;
+    ).then(sj => {
+      const [status, json] = sj;
+      // console.log(json.id);
+      // console.log(token);
+      if (status === 200) {
+        this.setState(prevState => ({
+          artist: {
+            name: prevState.artist.name,
+            id: json.id
+          }
+        }));
+      }
+      return status;
     });
   }
 
-  getArtworks(token, artist_id) {console.log(this.state.token.expiration, this.state.token.expiration < Date.now());
+  getArtworks(token, artistId) {
     const getOptions = {
       method: 'GET',
       headers: {
@@ -84,22 +109,31 @@ class App extends Component {
     };
 
     return fetch(
-      `https://api.artsy.net/api/artists/${artist_id}`,
+      `https://api.artsy.net/api/artists/${artistId}`,
       getOptions
     ).then(res => {
-      console.log('statusCode:', res.status);
-      res.headers.forEach(header => console.log('header:', header));
-      return res.json();
+      // console.log('statusCode:', res.status);
+      // res.headers.forEach(header => console.log('header:', header));
+      return Promise.all([res.status, res.json()]);
     }).catch(
       e => console.error(e)
-    ).then(json => {
+    ).then(sj => {
+      const [status, json] = sj;
       const regex = /.*\/(.*?)$/;
-      const artworks = json._links.artworks.href.match(regex)[1];
-      return artworks;
+      const uri = json._links.artworks.href.match(regex)[1];
+      if (status === 200) {
+        this.setState(prevState => ({
+          collection: {
+            uri,
+            artworks: prevState.collection.artworks
+          }
+        }));
+      }
+      return status;
     });
   }
 
-  setArtworks(token, artworks) {console.log(this.state.token.expiration, this.state.token.expiration < Date.now());
+  setArtworks(token, artworksUri) {
     const getOptions = {
       method: 'GET',
       headers: {
@@ -109,15 +143,17 @@ class App extends Component {
     };
 
     fetch(
-      `https://api.artsy.net/api/${artworks}`,
+      `https://api.artsy.net/api/${artworksUri}`,
       getOptions
     ).then(res => {
-      console.log('statusCode:', res.status);
-      res.headers.forEach(header => console.log('header:', header));
-      return res.json();
+      // console.log('statusCode:', res.status);
+      // res.headers.forEach(header => console.log('header:', header));
+      return Promise.all([res.status, res.json()]);
     }).catch(
       e => console.error(e)
-    ).then(json => {
+    ).then(sj => {
+      const [status, json] = sj;
+      // console.log(json);
       let artworks = [];
       json._embedded.artworks.forEach(artwork => {
         const id = artwork.id;
@@ -125,41 +161,101 @@ class App extends Component {
         const href = artwork._links.image.href.replace('{image_version}', image_version);
         artworks.push({id, href});
       });
-      console.log(artworks);
-      this.setState({artworks});
+      // console.log(artworks);
+      if (status === 200 && artworks.length > 0) {
+        this.setState(prevState => ({
+          collection: {
+            uri: prevState.uri,
+            artworks
+          }
+        }));
+      } else if (status === 200 && artworks.length === 0) {
+        this.setState(prevState => ({
+          error: 'artworks'
+        }));
+      }
+      return status;
     });
   }
 
-  updateArtist = () => {
-    let artist_name = document.getElementById('artist-search').value;
-    artist_name = artist_name.replace(/[\s_]+/, '-');
-    console.log(artist_name);
-    this.setState({artist_name});
-    this.getToken()
-      .then(message => {
-        console.log(message);
-        return this.getArtistId(this.state.token.string, this.state.artist_name);
+  displayArtistArtworks() {
+    const searchSubmit = document.getElementById('search-submit');
+    searchSubmit.setAttribute('disabled', '');
+    Promise.resolve(setTimeout(() => searchSubmit.removeAttribute('disabled'), 1500));
+    this.setState(prevState => ({
+      error: ''
+    }));
+    return this.getToken()
+      .then(prevStatus => {
+        // console.log('prevStatus:', prevStatus);
+        if (prevStatus === 201 || prevStatus === true) {
+          return this.getArtistId(this.state.token.string, this.state.artist.name);
+        } else if (prevStatus === 429) {
+          this.setState(prevState => ({
+            error: 'spam'
+          }));
+        } else {
+          this.setState({
+            error: 'token'
+          });
+        }
+        return false;
       })
-      .then(artist_id => {
-        console.log("AID:", artist_id);
-        return this.getArtworks(this.state.token.string, artist_id)
+      .then(prevStatus => {
+        if (prevStatus === 200) {
+          return this.getArtworks(this.state.token.string, this.state.artist.id);
+        } else if (prevStatus === 429) {
+          this.setState(prevState => ({
+            error: 'spam'
+          }));
+        } else if (prevStatus !== false) {
+          this.setState({
+            error: 'artist'
+          });
+        }
+        return false;
       })
-      .then(artworks => this.setArtworks(this.state.token.string, artworks));
+      .then(prevStatus => {
+        if (prevStatus === 200) {
+          return this.setArtworks(this.state.token.string, this.state.collection.uri);
+        } else if (prevStatus === 429) {
+          this.setState(prevState => ({
+            error: 'spam'
+          }));
+        } else if (prevStatus !== false) {
+          this.setState({
+            error: 'collection'
+          });
+        }
+        return false;
+      });
+      // .then(prevStatus => {
+      //   if (prevStatus !== 200 && prevStatus !== false && this.state.collection.artworks.length === 0)
+      // });
+  }
+
+  updateArtist = e => {
+    e.preventDefault();
+    let artistName = document.getElementById('artist-search').value;
+    artistName = artistName.toLowerCase();
+    artistName = artistName.replace(/[^\w\s-]+/g, '');
+    artistName = artistName.replace(/[\s_]+/g, '-');
+    // console.log(artistName);
+    this.setState(prevState => ({
+      artist: {
+        name: artistName,
+        id: prevState.artist.id
+      }
+    }));
+    this.displayArtistArtworks();
   }
 
   componentDidMount() {
-    const prom = this.getToken()
-      .then(message => {
-        console.log(message);
-        return this.getArtistId(this.state.token.string, this.state.artist_name);
-      })
-      .then(artist_id => this.getArtworks(this.state.token.string, artist_id))
-      .then(artworks => this.setArtworks(this.state.token.string, artworks))
-    return prom;
+    this.displayArtistArtworks();
   }
 
   render() {
-    console.log(this.state.artworks);
+    console.log(this.state.collection.artworks);
     return (
       <div className="App">
         <header className="App-header">
@@ -175,8 +271,9 @@ class App extends Component {
           >
             Learn React
           </a>*/}
-          <ArtistSearch handleArtistUpdate={this.updateArtist} />
-          <Collection artworks={this.state.artworks} />
+          <ErrorMessage error={this.state.error} />
+          <ArtistSearch currentArtist={'/' + this.state.artist.name} handleArtistUpdate={this.updateArtist} />
+          <Collection artworks={this.state.collection.artworks} />
         </header>
       </div>
     );

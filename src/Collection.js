@@ -13,7 +13,7 @@ const Collection = props => {
     );
   } else {
     return (
-      <h2>Sorry, there are no available artworks from this artist.</h2>
+      <h2>Search for an artist to create your gallery. Artist with public domain work only, please.</h2>
     );
   }
 }
