@@ -12,3 +12,27 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+img {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.arrow {
+  max-height: 100px;
+  max-width: 100px;
+  z-index: 1000;
+  position: absolute;
+  left: 100px;
+  top: calc(50% - 50px);
+}
+
+#left {
+  left: 0;
+  margin-right: auto;
+}
+
+#right {
+  right: 0;
+  margin-left: auto;
+}

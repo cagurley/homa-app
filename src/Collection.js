@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Arrow from './Arrow';
 import Artwork from './Artwork';
 
 const Collection = props => {
   if (props.artworks.length !== 0) {
     let displayIndices = [
-      props.currentIndex - 1,
-      props.currentIndex,
-      props.currentIndex + 1
+      props.cursor - 1,
+      props.cursor,
+      props.cursor + 1
     ];
     console.log(
       props.artworks.filter(
@@ -15,12 +16,22 @@ const Collection = props => {
       )
     );
     return (
-      <div>
+      <div style={{position: 'relative'}} className="container-fluid row">
+        <Arrow
+          id="left"
+          cursor={props.cursor}
+          end={props.artworks.length - 1}
+          handleCurrentIndexUpdate={props.updateCurrentIndex} />
         {props.artworks.filter(
           (artwork, index) => displayIndices.includes(index)
         ).map(artwork =>
           <Artwork key={artwork.id} source={artwork.href} />
         )}
+        <Arrow
+          id="right"
+          cursor={props.cursor}
+          end={props.artworks.length - 1}
+          handleCurrentIndexUpdate={props.updateCurrentIndex} />
       </div>
     );
   } else {
@@ -32,7 +43,7 @@ const Collection = props => {
 
 Collection.propTypes = {
   artworks: PropTypes.array.isRequired,
-  currentIndex: PropTypes.number.isRequired
+  cursor: PropTypes.number.isRequired
 }
 
 export default Collection;

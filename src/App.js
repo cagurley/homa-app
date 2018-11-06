@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
 import './App.css';
+import Nav from './Nav';
 import ErrorMessage from './ErrorMessage';
 import ArtistSearch from './ArtistSearch';
-import Arrow from './Arrow';
 import Collection from './Collection';
 
 class App extends Component {
@@ -170,7 +169,7 @@ class App extends Component {
           collection: {
             uri: prevState.uri,
             artworks,
-            currentIndex: prevState.collection.currentIndex
+            currentIndex: 0
           }
         }));
       } else if (status === 200 && artworks.length === 0) {
@@ -250,6 +249,11 @@ class App extends Component {
         name: artistName,
         id: prevState.artist.id
       }
+      // collection: {
+      //   uri: prevState.collection.uri,
+      //   artworks: prevState.collection.artworks,
+      //   currentIndex: 0
+      // }
     }));
     this.displayArtistArtworks();
   }
@@ -282,37 +286,15 @@ class App extends Component {
     // console.log(this.state.collection.artworks);
     return (
       <div className="App">
-        <header className="App-header">
-          {/*<img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>*/}
-          <ErrorMessage
-            error={this.state.error} />
-          <ArtistSearch
-            currentArtist={'/' + this.state.artist.name} handleArtistUpdate={this.updateArtist} />
-          <Arrow
-            id="left"
-            cursor={this.state.collection.currentIndex}
-            end={this.state.collection.artworks.length - 1}
-            handleCurrentIndexUpdate={this.updateCurrentIndex} />
-          <Collection
-            artworks={this.state.collection.artworks}
-            currentIndex={this.state.collection.currentIndex} />
-          <Arrow
-            id="right"
-            cursor={this.state.collection.currentIndex}
-            end={this.state.collection.artworks.length - 1}
-            handleCurrentIndexUpdate={this.updateCurrentIndex} />
-        </header>
+        <Nav />
+        <ErrorMessage
+          error={this.state.error} />
+        <ArtistSearch
+          currentArtist={'/' + this.state.artist.name} handleArtistUpdate={this.updateArtist} />
+        <Collection
+          artworks={this.state.collection.artworks}
+          cursor={this.state.collection.currentIndex}
+          updateCurrentIndex={this.updateCurrentIndex} />
       </div>
     );
   }

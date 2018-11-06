@@ -19,9 +19,13 @@ class Arrow extends Component {
   }
 
   disable(lr, cursor, end) {
-    if ((lr === 'left' && cursor === 0) || (lr === 'right' && cursor === end)) {
+    if ((lr === 'left' && cursor <= 0) || (lr === 'right' && cursor >= end)) {
       this.setState(prevState => ({
-        disabled: !prevState.disabled
+        disabled: true
+      }));
+    } else {
+      this.setState(prevState => ({
+        disabled: false
       }));
     }
   }
@@ -34,15 +38,27 @@ class Arrow extends Component {
     );
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.cursor !== this.props.cursor || prevProps.end !== this.props.end) {
+      this.disable(
+        this.props.id,
+        this.props.cursor,
+        this.props.end
+      );
+    }
+  }
+
   render(props) {
+    console.log('ARROW', this);
     return (
       <img
         id={this.props.id}
         src={this.setSource(this.props.id)}
-        style={{maxHeight: '100px'}}
+        alt="Navigational arrow"
         disabled={this.state.disabled}
+        className="arrow"
         onClick={() => {
-          if ((this.props.id === 'left' && this.props.cursor > 0) || (this.props.id === 'right' && this.props.cursor < this.props.end)) {
+          if (!this.state.disabled) {
             this.props.handleCurrentIndexUpdate(this.props.id);
           }
         }} />
