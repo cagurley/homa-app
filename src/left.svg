@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright Colton Atticus Gurley -->
+<svg id="CAG_playicon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0.00 0.00 86.60 100.00">
+  <polygon points="86.60,0.00 82.10,7.79 82.10,92.21 86.60,100.00" style="fill: #050505;" />
+  <polygon points="86.60,100.00 82.10,92.21 9.00,50.00 0.00,50.00" style="fill: #050505;" />
+  <polygon points="0.00,50.00 9.00,50.00 82.10,7.79 86.60,0.00" style="fill: #050505;" />
+</svg>

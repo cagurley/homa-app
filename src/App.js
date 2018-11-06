@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './App.css';
 import ErrorMessage from './ErrorMessage';
 import ArtistSearch from './ArtistSearch';
+import Arrow from './Arrow';
 import Collection from './Collection';
 
 class App extends Component {
@@ -17,7 +18,8 @@ class App extends Component {
     },
     collection: {
       uri: '',
-      artworks: []
+      artworks: [],
+      currentIndex: 0
     },
     error: ''
   }
@@ -125,7 +127,8 @@ class App extends Component {
         this.setState(prevState => ({
           collection: {
             uri,
-            artworks: prevState.collection.artworks
+            artworks: prevState.collection.artworks,
+            currentIndex: prevState.collection.currentIndex
           }
         }));
       }
@@ -166,7 +169,8 @@ class App extends Component {
         this.setState(prevState => ({
           collection: {
             uri: prevState.uri,
-            artworks
+            artworks,
+            currentIndex: prevState.collection.currentIndex
           }
         }));
       } else if (status === 200 && artworks.length === 0) {
@@ -250,12 +254,32 @@ class App extends Component {
     this.displayArtistArtworks();
   }
 
+  updateCurrentIndex = lr => {
+    if (lr === 'left') {
+      this.setState(prevState => ({
+        collection: {
+          uri: prevState.collection.uri,
+          artworks: prevState.collection.artworks,
+          currentIndex: prevState.collection.currentIndex - 1
+        }
+      }));
+    } else if (lr === 'right') {
+      this.setState(prevState => ({
+        collection: {
+          uri: prevState.collection.uri,
+          artworks: prevState.collection.artworks,
+          currentIndex: prevState.collection.currentIndex + 1
+        }
+      }));
+    }
+  }
+
   componentDidMount() {
     this.displayArtistArtworks();
   }
 
   render() {
-    console.log(this.state.collection.artworks);
+    // console.log(this.state.collection.artworks);
     return (
       <div className="App">
         <header className="App-header">
@@ -271,9 +295,23 @@ class App extends Component {
           >
             Learn React
           </a>*/}
-          <ErrorMessage error={this.state.error} />
-          <ArtistSearch currentArtist={'/' + this.state.artist.name} handleArtistUpdate={this.updateArtist} />
-          <Collection artworks={this.state.collection.artworks} />
+          <ErrorMessage
+            error={this.state.error} />
+          <ArtistSearch
+            currentArtist={'/' + this.state.artist.name} handleArtistUpdate={this.updateArtist} />
+          <Arrow
+            id="left"
+            cursor={this.state.collection.currentIndex}
+            end={this.state.collection.artworks.length - 1}
+            handleCurrentIndexUpdate={this.updateCurrentIndex} />
+          <Collection
+            artworks={this.state.collection.artworks}
+            currentIndex={this.state.collection.currentIndex} />
+          <Arrow
+            id="right"
+            cursor={this.state.collection.currentIndex}
+            end={this.state.collection.artworks.length - 1}
+            handleCurrentIndexUpdate={this.updateCurrentIndex} />
         </header>
       </div>
     );
