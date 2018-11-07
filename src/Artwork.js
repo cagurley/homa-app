@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 
 const Artwork = props => {
   return (
-    <div className="col-4">
+    <div className={'col-12 ' + props.className}>
       <img src={props.source} alt='artwork' />
     </div>
   );
 }
 
 Artwork.propTypes = {
-  source: PropTypes.string.isRequired
+  source: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired
 }
 
 export default Artwork;

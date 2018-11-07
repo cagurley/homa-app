@@ -36,3 +36,13 @@ img {
   right: 0;
   margin-left: auto;
 }
+
+.previous {
+  position: absolute;
+  right: 60%;
+}
+
+.next {
+  position: absolute;
+  left: 60%;
+}

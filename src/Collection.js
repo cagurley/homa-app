@@ -10,6 +10,11 @@ const Collection = props => {
       props.cursor,
       props.cursor + 1
     ];
+    const displayClassNames = [
+      'previous',
+      'focus',
+      'next'
+    ];
     console.log(
       props.artworks.filter(
         (artwork, index) => displayIndices.includes(index)
@@ -24,8 +29,8 @@ const Collection = props => {
           handleCurrentIndexUpdate={props.updateCurrentIndex} />
         {props.artworks.filter(
           (artwork, index) => displayIndices.includes(index)
-        ).map(artwork =>
-          <Artwork key={artwork.id} source={artwork.href} />
+        ).map((artwork, index) =>
+          <Artwork key={artwork.id} source={artwork.href} className={displayClassNames[index]} />
         )}
         <Arrow
           id="right"
