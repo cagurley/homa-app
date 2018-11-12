@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import './App.css';
 import Background from './Background';
 import Nav from './Nav';
 import Gallery from './Gallery';
 import Music from './Music';
 import Museum from './Museum';
+import NotFound from './NotFound';
 
 class App extends Component {
   state = {
@@ -30,17 +31,20 @@ class App extends Component {
         <div className="App">
           <Background backgroundStyle={this.state.backgroundStyle} />
           <Nav />
-          <Route
-            exact path="/"
-            component={Gallery} />
-          <Route
-            exact path='/Music'
-            component={Music} />
-          <Route
-            exact path='/Museum'
-            render={() =>
-              <Museum handleBackgroundUpdate={this.updateBackground} />
-            } />
+          <Switch>
+            <Route
+              exact path="/"
+              component={Gallery} />
+            <Route
+              exact path='/Music'
+              component={Music} />
+            <Route
+              exact path='/Museum'
+              render={() =>
+                <Museum handleBackgroundUpdate={this.updateBackground} />
+              } />
+            <Route component={NotFound} />
+          </Switch>
         </div>
       </BrowserRouter>
     );
