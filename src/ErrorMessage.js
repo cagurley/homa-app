@@ -13,6 +13,8 @@ const ErrorMessage = props => {
       return <h2>Sorry, something went wrong on collection retrieval.</h2>;
     case 'artworks':
       return <h2>Sorry, there are no available artworks from this artist.</h2>;
+    case 'museum':
+      return <h2>Sorry, that museum couldn't be found.</h2>;
     default:
       return null;
   }

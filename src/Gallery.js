@@ -26,8 +26,8 @@ class Gallery extends Component {
     // console.log(this.state.token, this.state.token.expiration < Date.now());
     if (this.state.token.expiration - Date.now() < 86400000) {
       const postData = JSON.stringify({
-        client_id: process.env.REACT_APP_CLIENT_ID,
-        client_secret: process.env.REACT_APP_CLIENT_SECRET
+        client_id: process.env.REACT_APP_ARTSY_CLIENT_ID,
+        client_secret: process.env.REACT_APP_ARTSY_CLIENT_SECRET
       });
       const tokenOptions = {
         method: 'POST',
@@ -243,18 +243,20 @@ class Gallery extends Component {
     artistName = artistName.replace(/[^\w\s-]+/g, '');
     artistName = artistName.replace(/[\s_]+/g, '-');
     // console.log(artistName);
-    this.setState(prevState => ({
-      artist: {
-        name: artistName,
-        id: prevState.artist.id
-      }
-      // collection: {
-      //   uri: prevState.collection.uri,
-      //   artworks: prevState.collection.artworks,
-      //   currentIndex: 0
-      // }
-    }));
-    this.displayArtistArtworks();
+    this.setState(
+      prevState => ({
+        artist: {
+          name: artistName,
+          id: prevState.artist.id
+        }
+        // collection: {
+        //   uri: prevState.collection.uri,
+        //   artworks: prevState.collection.artworks,
+        //   currentIndex: 0
+        // }
+      }),
+      () => this.displayArtistArtworks()
+    );
   }
 
   updateCurrentIndex = lr => {
