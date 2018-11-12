@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import './App.css';
 import Background from './Background';
 import Nav from './Nav';
@@ -31,13 +31,27 @@ class App extends Component {
         <div className="App">
           <Background backgroundStyle={this.state.backgroundStyle} />
           <Nav />
+          <Route
+            path="/"
+            render={({ location }) => {
+              let hiddenGallery = true;
+              let hiddenMusic = true;
+              if (location.pathname === '/Gallery') {
+                hiddenGallery = false;
+              } else if (location.pathname === '/Music') {
+                hiddenMusic = false;
+              }
+              return (
+                <div>
+                  <Gallery hidden={hiddenGallery}/>
+                  <Music hidden={hiddenMusic} />
+                </div>
+              );
+            }} />
           <Switch>
-            <Route
-              exact path="/"
-              component={Gallery} />
-            <Route
-              exact path='/Music'
-              component={Music} />
+            <Redirect exact from="/" to="/Gallery"/>
+            <Route exact path="/Gallery" />
+            <Route exact path="/Music" />
             <Route
               exact path='/Museum'
               render={() =>

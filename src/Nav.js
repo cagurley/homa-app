@@ -5,7 +5,7 @@ const Nav = props => {
   return (
     <ul className="nav nav-pills nav-fill">
       <li className="nav-item">
-        <NavLink className="nav-link" exact to="/">Gallery</NavLink>
+        <NavLink className="nav-link" exact to="/Gallery">Gallery</NavLink>
       </li>
       <li className="nav-item">
         <NavLink className="nav-link" exact to="/Music">Music</NavLink>

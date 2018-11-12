@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './App.css';
 import ErrorMessage from './ErrorMessage';
 import ArtistSearch from './ArtistSearch';
@@ -286,7 +287,7 @@ class Gallery extends Component {
   render() {
     // console.log(this.state.collection.artworks);
     return (
-      <div>
+      <div hidden={this.props.hidden}>
         <ErrorMessage
           error={this.state.error} />
         <ArtistSearch
@@ -299,6 +300,10 @@ class Gallery extends Component {
       </div>
     );
   }
+}
+
+Gallery.propTypes = {
+  hidden: PropTypes.bool.isRequired
 }
 
 export default Gallery;

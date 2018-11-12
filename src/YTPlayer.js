@@ -1,32 +1,10 @@
 import React, { Component } from 'react';
 
-// function onYouTubeIframeAPIReady() {
-//     player = new YT.Player('existing-iframe-example', {
-//         events: {
-//           'onReady': onPlayerReady,
-//           'onStateChange': onPlayerStateChange
-//         }
-//     });
-//   }
-
 class YTPlayer extends Component {
-  // onYouTubeIframeAPIReady() {
-  //   return (
-  //     new YT.Player('player', {
-  //       height: '390',
-  //       width: '640',
-  //       videoId: 'M7lc1UVf-VE',
-  //       events: {
-  //         'onReady': onPlayerReady,
-  //         'onStateChange': onPlayerStateChange
-  //       }
-  //     })
-  //   );
-  // }
 
   render() {
     return (
-      <div id="player"></div>
+      <iframe id="player" frameBorder="0" allowFullScreen="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="640" height="390" src="https://www.youtube.com/embed/?enablejsapi=1"></iframe>
     );
   }
 }

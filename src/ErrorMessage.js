@@ -15,6 +15,10 @@ const ErrorMessage = props => {
       return <h2>Sorry, there are no available artworks from this artist.</h2>;
     case 'museum':
       return <h2>Sorry, that museum couldn't be found.</h2>;
+    case 'player':
+      return <h2>Sorry, there was a problem initializing the player.</h2>;
+    case 'music':
+      return <h2>Sorry, no music playlist could be found for that search term.</h2>;
     default:
       return null;
   }
