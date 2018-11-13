@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 const Artwork = props => {
   return (
     <div className={'col-12 ' + props.className}>
-      <img src={props.source} alt='artwork' />
+      <img
+        src={props.source}
+        alt="artwork"
+        className="artwork" />
     </div>
   );
 }

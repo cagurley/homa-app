@@ -287,7 +287,7 @@ class Gallery extends Component {
   render() {
     // console.log(this.state.collection.artworks);
     return (
-      <div hidden={this.props.hidden}>
+      <div hidden={this.props.hidden} className="container-fluid">
         <ErrorMessage
           error={this.state.error} />
         <ArtistSearch

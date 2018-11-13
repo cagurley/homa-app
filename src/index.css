@@ -18,6 +18,22 @@ img {
   max-width: 100%;
 }
 
+.artwork {
+  max-width: 50%;
+}
+
+.container-fluid {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.row {
+  height: 85vh;
+  align-items: center;
+}
+
 .arrow {
   max-height: 100px;
   max-width: 100px;
