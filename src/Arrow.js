@@ -49,14 +49,14 @@ class Arrow extends Component {
   }
 
   render(props) {
-    console.log('ARROW', this);
+    // console.log('ARROW', this);
     return (
       <img
         id={this.props.id}
         src={this.setSource(this.props.id)}
         alt="Navigational arrow"
         disabled={this.state.disabled}
-        className="arrow"
+        className={'arrow' + (this.state.disabled ? ' disabled' : '')}
         onClick={() => {
           if (!this.state.disabled) {
             this.props.handleCurrentIndexUpdate(this.props.id);

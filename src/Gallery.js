@@ -288,11 +288,11 @@ class Gallery extends Component {
     // console.log(this.state.collection.artworks);
     return (
       <div hidden={this.props.hidden} className="container-fluid">
-        <ErrorMessage
-          error={this.state.error} />
         <ArtistSearch
           currentArtist={'/' + this.state.artist.name}
           handleArtistUpdate={this.updateArtist} />
+        <ErrorMessage
+          error={this.state.error} />
         <Collection
           artworks={this.state.collection.artworks}
           cursor={this.state.collection.currentIndex}

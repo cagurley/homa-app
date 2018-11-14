@@ -2,26 +2,41 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const ErrorMessage = props => {
+  let innerContent;
   switch (props.error) {
     case 'spam':
-      return <h2>Sorry, the server can't handle that many requests. Please don't spam the search feature.</h2>;
+      innerContent = <span className="alert alert-danger" role="alert">Sorry, the server can't handle that many requests. Please don't spam the search feature.</span>;
+      break;
     case 'token':
-      return <h2>Sorry, something went wrong on token retrieval.</h2>;
+      innerContent = <span className="alert alert-info" role="alert">Sorry, something went wrong on token retrieval.</span>;
+      break;
     case 'artist':
-      return <h2>Sorry, that artist couldn't be found.</h2>;
+      innerContent = <span className="alert alert-info" role="alert">Sorry, that artist couldn't be found.</span>;
+      break;
     case 'collection':
-      return <h2>Sorry, something went wrong on collection retrieval.</h2>;
+      innerContent = <span className="alert alert-info" role="alert">Sorry, something went wrong on collection retrieval.</span>;
+      break;
     case 'artworks':
-      return <h2>Sorry, there are no available artworks from this artist.</h2>;
+      innerContent = <span className="alert alert-info" role="alert">Sorry, there are no available artworks from this artist.</span>;
+      break;
     case 'museum':
-      return <h2>Sorry, that museum couldn't be found.</h2>;
+      innerContent = <span className="alert alert-info" role="alert">Sorry, that museum couldn't be found.</span>;
+      break;
     case 'player':
-      return <h2>Sorry, there was a problem initializing the player.</h2>;
+      innerContent = <span className="alert alert-warning" role="alert">Sorry, there was a problem initializing the player. Try refreshing.</span>;
+      break;
     case 'music':
-      return <h2>Sorry, no music playlist could be found for that search term.</h2>;
+      innerContent = <span className="alert alert-info" role="alert">Sorry, no music playlist could be found for that search term.</span>;
+      break;
     default:
-      return null;
+      innerContent = null;
+      break;
   }
+  return (
+    <div className="alert-line">
+      {innerContent}
+    </div>
+  );
 };
 
 ErrorMessage.proptypes = {

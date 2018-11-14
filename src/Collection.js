@@ -11,9 +11,9 @@ const Collection = props => {
       props.cursor + 1
     ];
     const displayClassNames = [
-      'previous',
+      'previous d-none d-sm-block',
       'focus',
-      'next'
+      'next d-none d-sm-block'
     ];
     // console.log(
     //   props.artworks.filter(
@@ -26,18 +26,18 @@ const Collection = props => {
     if (displayIndices[0] < 0) {
       currentArtworks.unshift({
         id: 'bookend-left',
-        href: ''
+        href: null
       });
     }
     if (displayIndices[2] > props.artworks.length - 1) {
       currentArtworks.push({
         id: 'bookend-right',
-        href: ''
+        href: null
       });
     }
     // console.log(currentArtworks);
     currentArtworks = currentArtworks.map((artwork, index) =>
-      <Artwork key={artwork.id} source={artwork.href} className={displayClassNames[index]} />
+      <Artwork key={artwork.id} source={artwork.href} className={displayClassNames[index] + (artwork.href ? '' : ' bookend')} />
     );
     // console.log(currentArtworks);
     return (
@@ -57,7 +57,7 @@ const Collection = props => {
     );
   } else {
     return (
-      <h2>Search for an artist to create your gallery. Artist with public domain work only, please.</h2>
+      <h3>Search for an artist to create your gallery. Artists with public domain work only, please.</h3>
     );
   }
 };

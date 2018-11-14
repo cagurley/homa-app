@@ -17,21 +17,17 @@ class Museum extends Component {
         'Ocp-Apim-Subscription-Key': this.state.key,
       }
     };
-
-    // console.log(`https://api.cognitive.microsoft.com/bing/v7.0/images/search?q=${this.state.query}&count=1&safeSearch=Strict`);
+    
     fetch(
       `https://api.cognitive.microsoft.com/bing/v7.0/images/search?q=${this.state.query}&count=1&safeSearch=Strict`,
       getOptions
     ).then(res => {
-      // console.log('statusCode:', res.status);
-      // res.headers.forEach(header => console.log('header:', header));
       return Promise.all([res.status, res.json()]);
     }).catch(
       e => console.error(e)
     ).then(sj => {
       const [status, json] = sj;
       console.log(json);
-      // console.log(result);
       if (status === 200 && json.value.length > 0) {
         const result = json.value[0].contentUrl;
         this.props.handleBackgroundUpdate(result);
@@ -56,9 +52,6 @@ class Museum extends Component {
       error: ''
     }));
     return this.setMuseum();
-      // .then(prevStatus => {
-      //   if (prevStatus !== 200 && prevStatus !== false && this.state.collection.artworks.length === 0)
-      // });
   }
 
   updateQuery = e => {
@@ -68,25 +61,22 @@ class Museum extends Component {
     query = query.replace(/[^\w\s-+]+/g, '');
     query = query.replace(/[\s_-]+/g, '+');
     query = query + '+art+museum';
-    console.log(query);
     this.setState(
       prevState => ({
         query
       }),
       () => this.displayMuseum()
     );
-    // console.log(this.state, this.props);
-    // this.displayMuseum();
   }
 
   render() {
     return (
       <div>
-        <ErrorMessage
-          error={this.state.error} />
         <MuseumSearch
           currentQuery={this.state.query}
           handleQueryUpdate={this.updateQuery} />
+        <ErrorMessage
+          error={this.state.error} />
       </div>
     );
   }

@@ -29,36 +29,40 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="App">
-          <Background backgroundStyle={this.state.backgroundStyle} />
           <Nav />
-          <Route
-            path="/"
-            render={({ location }) => {
-              let hiddenGallery = true;
-              let hiddenMusic = true;
-              if (location.pathname === '/Gallery') {
-                hiddenGallery = false;
-              } else if (location.pathname === '/Music') {
-                hiddenMusic = false;
-              }
-              return (
-                <div>
-                  <Gallery hidden={hiddenGallery}/>
-                  <Music hidden={hiddenMusic} />
-                </div>
-              );
-            }} />
-          <Switch>
-            <Redirect exact from="/" to="/Gallery"/>
-            <Route exact path="/Gallery" />
-            <Route exact path="/Music" />
-            <Route
-              exact path='/Museum'
-              render={() =>
-                <Museum handleBackgroundUpdate={this.updateBackground} />
-              } />
-            <Route component={NotFound} />
-          </Switch>
+          <div className="Page">
+            <Background backgroundStyle={this.state.backgroundStyle} />
+            <div className="Content">
+              <Route
+                path="/"
+                render={({ location }) => {
+                  let hiddenGallery = true;
+                  let hiddenMusic = true;
+                  if (location.pathname === '/Gallery') {
+                    hiddenGallery = false;
+                  } else if (location.pathname === '/Music') {
+                    hiddenMusic = false;
+                  }
+                  return (
+                    <div>
+                      <Gallery hidden={hiddenGallery}/>
+                      <Music hidden={hiddenMusic} />
+                    </div>
+                  );
+                }} />
+              <Switch>
+                <Redirect exact from="/" to="/Gallery"/>
+                <Route exact path="/Gallery" />
+                <Route exact path="/Music" />
+                <Route
+                  exact path='/Museum'
+                  render={() =>
+                    <Museum handleBackgroundUpdate={this.updateBackground} />
+                  } />
+                <Route component={NotFound} />
+              </Switch>
+            </div>
+          </div>
         </div>
       </BrowserRouter>
     );

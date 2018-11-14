@@ -6,26 +6,20 @@
   flex-direction: column;
   /* align-items: center; */
   /* justify-content: center; */
-  font-size: calc(10px + 2vmin);
+  /* font-size: calc(10px + 2vmin); */
   color: white;
 }
 
-#background {
-  content: '';
-  background-repeat: no-repeat;
-  background-size: cover;
-  opacity: 0.75;
-  width: 100%;
-  height: 100%;
-  /* top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0; */
-  position: absolute;
-  z-index: -1;
+.Page {
+  min-height: calc(100vh - 56px);
+  position: relative;
 }
 
-.App-logo {
+.Content {
+  margin-top: 1rem;
+}
+
+/* .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 40vmin;
 }
@@ -52,4 +46,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
