@@ -7,7 +7,7 @@ const MusicSearch = props =>
     <h3>Search for a musical genre:</h3>
     <form className="form-inline justify-content-center" action="" method="get" onSubmit={props.handleQueryUpdate}>
       <input id="music-search" type="search" className="form-control" />
-      <button id="search-submit" type="submit" className="btn">Search</button>
+      <button id="music-submit" type="submit" className="btn">Search</button>
     </form>
   </div>;
 

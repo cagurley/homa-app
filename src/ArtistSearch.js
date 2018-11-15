@@ -7,7 +7,7 @@ const ArtistSearch = props =>
     <h3>Search for an artist with public domain work:</h3>
     <form className="form-inline justify-content-center" action="" method="get" onSubmit={props.handleArtistUpdate}>
       <input id="artist-search" type="search" className="form-control" />
-      <button id="search-submit" type="submit" className="btn">Search</button>
+      <button id="artist-submit" type="submit" className="btn">Search</button>
     </form>
   </div>;
 

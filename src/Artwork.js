@@ -8,12 +8,18 @@ const Artwork = props => {
         src={props.source}
         alt="artwork"
         className="artwork" />
+      <div className={'card mx-auto' + ((props.className === 'focus') ? '' : ' disabled')}>
+        <div className="card-body">
+          <h5 className="card-title">{props.title}</h5>
+        </div>
+      </div>
     </div>
   );
 }
 
 Artwork.propTypes = {
-  source: PropTypes.string.isRequired,
+  source: PropTypes.string,
+  title: PropTypes.string.isRequired,
   className: PropTypes.string.isRequired
 }
 

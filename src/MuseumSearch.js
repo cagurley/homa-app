@@ -7,7 +7,7 @@ const MuseumSearch = props =>
     <h3>Search for the name of an art museum:</h3>
     <form className="form-inline justify-content-center" action="" method="get" onSubmit={props.handleQueryUpdate}>
       <input id="museum-search" type="search" className="form-control" />
-      <button id="search-submit" type="submit" className="btn">Search</button>
+      <button id="museum-submit" type="submit" className="btn">Search</button>
     </form>
   </div>;
 

@@ -11,35 +11,30 @@ const Collection = props => {
       props.cursor + 1
     ];
     const displayClassNames = [
-      'previous d-none d-sm-block',
+      'previous d-none d-lg-block',
       'focus',
-      'next d-none d-sm-block'
+      'next d-none d-lg-block'
     ];
-    // console.log(
-    //   props.artworks.filter(
-    //     (artwork, index) => displayIndices.includes(index)
-    //   )
-    // );
     let currentArtworks = props.artworks.filter(
       (artwork, index) => displayIndices.includes(index)
     );
     if (displayIndices[0] < 0) {
       currentArtworks.unshift({
         id: 'bookend-left',
+        title: 'N/A',
         href: null
       });
     }
     if (displayIndices[2] > props.artworks.length - 1) {
       currentArtworks.push({
         id: 'bookend-right',
+        title: 'N/A',
         href: null
       });
     }
-    // console.log(currentArtworks);
     currentArtworks = currentArtworks.map((artwork, index) =>
-      <Artwork key={artwork.id} source={artwork.href} className={displayClassNames[index] + (artwork.href ? '' : ' bookend')} />
+      <Artwork key={artwork.id} title={artwork.title} source={artwork.href} className={displayClassNames[index] + (artwork.href ? '' : ' bookend')} />
     );
-    // console.log(currentArtworks);
     return (
       <div className="container-fluid row">
         <Arrow

@@ -12,7 +12,7 @@ class Gallery extends Component {
       expiration: Date.now()
     },
     artist: {
-      name: 'edouard-manet',
+      name: 'claude-monet',
       id: ''
     },
     collection: {
@@ -23,8 +23,9 @@ class Gallery extends Component {
     error: ''
   }
 
+  // Posts to .../tokens/xapptoken endpoint to authenticate
   getToken() {
-    // console.log(this.state.token, this.state.token.expiration < Date.now());
+    // Below prevents unnecessary posts as tokens are valid for about a week
     if (this.state.token.expiration - Date.now() < 86400000) {
       const postData = JSON.stringify({
         client_id: process.env.REACT_APP_ARTSY_CLIENT_ID,
@@ -42,14 +43,11 @@ class Gallery extends Component {
         'https://api.artsy.net/api/tokens/xapp_token',
         tokenOptions
       ).then(res => {
-        // console.log('statusCode:', res.status);
-        // res.headers.forEach(header => console.log('header:', header));
         return Promise.all([res.status, res.json()]);
       }).catch(
        e => console.error(`problem with request: ${e.message}`)
       ).then(sj => {
         const [status, json] = sj;
-        // console.log(status, json);
         if (status === 201) {
           this.setState(prevState => ({
             token: {
@@ -58,7 +56,6 @@ class Gallery extends Component {
             }
           }));
         }
-        // console.log(this.state.token);
         return status;
       });
     } else {
@@ -66,6 +63,8 @@ class Gallery extends Component {
     }
   }
 
+  // Gets from .../artists/ endpoint with English name string, e.g. 'claude-monet'
+  // Will return an id for the artist as a pseudo-redirect
   getArtistId (token, artistName) {
     const getOptions = {
       method: 'GET',
@@ -79,15 +78,11 @@ class Gallery extends Component {
      `https://api.artsy.net/api/artists/${artistName}`,
      getOptions
     ).then(res => {
-     // console.log('statusCode:', res.status);
-     // res.headers.forEach(header => console.log('header:', header));
      return Promise.all([res.status, res.json()]);
     }).catch(
      e => console.error(e)
     ).then(sj => {
       const [status, json] = sj;
-      // console.log(json.id);
-      // console.log(token);
       if (status === 200) {
         this.setState(prevState => ({
           artist: {
@@ -100,6 +95,7 @@ class Gallery extends Component {
     });
   }
 
+  // Gets from .../artists/ endpoint now with the id string, e.g. '4d8b92774eb68a1b2c000134'
   getArtworks(token, artistId) {
     const getOptions = {
       method: 'GET',
@@ -113,8 +109,6 @@ class Gallery extends Component {
       `https://api.artsy.net/api/artists/${artistId}`,
       getOptions
     ).then(res => {
-      // console.log('statusCode:', res.status);
-      // res.headers.forEach(header => console.log('header:', header));
       return Promise.all([res.status, res.json()]);
     }).catch(
       e => console.error(e)
@@ -135,6 +129,8 @@ class Gallery extends Component {
     });
   }
 
+  // Gets from /artworks/ endpoint with a query string for the artist id
+  // e.g. 'artworks?artist_id=4d8b92774eb68a1b2c000134'
   setArtworks(token, artworksUri) {
     const getOptions = {
       method: 'GET',
@@ -148,22 +144,19 @@ class Gallery extends Component {
       `https://api.artsy.net/api/${artworksUri}`,
       getOptions
     ).then(res => {
-      // console.log('statusCode:', res.status);
-      // res.headers.forEach(header => console.log('header:', header));
       return Promise.all([res.status, res.json()]);
     }).catch(
       e => console.error(e)
     ).then(sj => {
       const [status, json] = sj;
-      // console.log(json);
       let artworks = [];
       json._embedded.artworks.forEach(artwork => {
         const id = artwork.id;
+        const title = artwork.title;
         const image_version = artwork.image_versions[0];
         const href = artwork._links.image.href.replace('{image_version}', image_version);
-        artworks.push({id, href});
+        artworks.push({id, title, href});
       });
-      // console.log(artworks);
       if (status === 200 && artworks.length > 0) {
         this.setState(prevState => ({
           collection: {
@@ -181,8 +174,9 @@ class Gallery extends Component {
     });
   }
 
+  // Disables search button to prevent spam and executes above functions to update state
   displayArtistArtworks() {
-    const searchSubmit = document.getElementById('search-submit');
+    const searchSubmit = document.getElementById('artist-submit');
     searchSubmit.setAttribute('disabled', '');
     Promise.resolve(setTimeout(() => searchSubmit.removeAttribute('disabled'), 1500));
     this.setState(prevState => ({
@@ -190,7 +184,6 @@ class Gallery extends Component {
     }));
     return this.getToken()
       .then(prevStatus => {
-        // console.log('prevStatus:', prevStatus);
         if (prevStatus === 201 || prevStatus === true) {
           return this.getArtistId(this.state.token.string, this.state.artist.name);
         } else if (prevStatus === 429) {
@@ -232,9 +225,6 @@ class Gallery extends Component {
         }
         return false;
       });
-      // .then(prevStatus => {
-      //   if (prevStatus !== 200 && prevStatus !== false && this.state.collection.artworks.length === 0)
-      // });
   }
 
   updateArtist = e => {
@@ -243,18 +233,12 @@ class Gallery extends Component {
     artistName = artistName.toLowerCase();
     artistName = artistName.replace(/[^\w\s-]+/g, '');
     artistName = artistName.replace(/[\s_]+/g, '-');
-    // console.log(artistName);
     this.setState(
       prevState => ({
         artist: {
           name: artistName,
           id: prevState.artist.id
         }
-        // collection: {
-        //   uri: prevState.collection.uri,
-        //   artworks: prevState.collection.artworks,
-        //   currentIndex: 0
-        // }
       }),
       () => this.displayArtistArtworks()
     );
@@ -285,7 +269,6 @@ class Gallery extends Component {
   }
 
   render() {
-    // console.log(this.state.collection.artworks);
     return (
       <div hidden={this.props.hidden} className="container-fluid">
         <ArtistSearch

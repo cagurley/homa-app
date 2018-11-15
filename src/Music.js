@@ -52,7 +52,7 @@ class Music extends Component {
   }
 
   searchMusic() {
-    const searchSubmit = document.getElementById('search-submit');
+    const searchSubmit = document.getElementById('music-submit');
     searchSubmit.setAttribute('disabled', '');
     Promise.resolve(setTimeout(() => searchSubmit.removeAttribute('disabled'), 1500));
     this.setState(prevState => ({

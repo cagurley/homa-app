@@ -17,7 +17,7 @@ class Museum extends Component {
         'Ocp-Apim-Subscription-Key': this.state.key,
       }
     };
-    
+
     fetch(
       `https://api.cognitive.microsoft.com/bing/v7.0/images/search?q=${this.state.query}&count=1&safeSearch=Strict`,
       getOptions
@@ -45,7 +45,7 @@ class Museum extends Component {
   }
 
   displayMuseum() {
-    const searchSubmit = document.getElementById('search-submit');
+    const searchSubmit = document.getElementById('museum-submit');
     searchSubmit.setAttribute('disabled', '');
     Promise.resolve(setTimeout(() => searchSubmit.removeAttribute('disabled'), 1500));
     this.setState(prevState => ({

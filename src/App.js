@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import './App.css';
 import Background from './Background';
 import Nav from './Nav';
 import Gallery from './Gallery';
 import Music from './Music';
+import Home from './Home';
 import Museum from './Museum';
 import NotFound from './NotFound';
 
@@ -51,7 +52,7 @@ class App extends Component {
                   );
                 }} />
               <Switch>
-                <Redirect exact from="/" to="/Gallery"/>
+                <Route exact path="/" component={Home}/>
                 <Route exact path="/Gallery" />
                 <Route exact path="/Music" />
                 <Route
