@@ -175,7 +175,7 @@ class Gallery extends Component {
     });
   }
 
-  // Disables search button to prevent spam and executes above functions to update state
+  // Disables ArtistSearch buttons to prevent spam and executes above functions to update state
   displayArtistArtworks() {
     const searchSubmit = document.getElementById('artist-submit');
     const similar = document.getElementById('similar');
@@ -233,6 +233,7 @@ class Gallery extends Component {
       });
   }
 
+  // Disables ArtistSearch buttons to prevent spam and executes above functions to update state
   displayRelatedArtworks() {
     const searchSubmit = document.getElementById('artist-submit');
     const similar = document.getElementById('similar');
@@ -249,7 +250,7 @@ class Gallery extends Component {
     let uri = this.state.collection.artworks[this.state.collection.currentIndex].similar;
     const regex = /.*\/(.*?)$/;
     uri = uri.match(regex)[1];
-    // console.log(uri);
+
     return this.getToken()
       .then(prevStatus => {
         if (prevStatus === 201 || prevStatus === true) {
