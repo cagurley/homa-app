@@ -19,7 +19,7 @@ To run this application:
 
 ## *Notes on Functionality*
 
-This React application uses Artsy, YouTube, and Bing Image Search APIs to permit the user to search for the image of an art museum to set the background, for a musical playlist to set the aural space, and for an artist with work in the public domain (the limitation of the free Artsy API) or public domain artworks similar to the currently viewed artwork to create and browse a gallery for their own original experience.
+This React application uses Artsy, YouTube, and Bing Image Search APIs to permit the user to search for the image of an art museum to set the background, for a musical playlist to set the aural space, and for an artist with work in the public domain (the limitation of the free Artsy API) or public domain artworks similar to the currently viewed artwork to create and browse a gallery for their own original experience. For best search results, it is necessary to search for an artist's full name, like "Vincent Van Gogh" or "Rembrandt van Rijn"; most abbreviated versions will return nothing. Also, please note that no video is loaded by the YouTube player by default; a successful search must be performed, else the player will display an error message (a search can still be performed if this has occurred).
 
 ### Thanks for reviewing my site! Please let me know where I can most improve.
 
