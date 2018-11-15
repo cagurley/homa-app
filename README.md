@@ -19,7 +19,7 @@ To run this application:
 
 ## *Notes on Functionality*
 
-This React application uses Artsy, YouTube, and Bing Image Search APIs to permit the user to search for the image of an art museum to set the background, for a musical playlist to set the aural space, and for an artist with work in the public domain (the limitation of the free Artsy API) to create and browse a gallery for their own original experience.
+This React application uses Artsy, YouTube, and Bing Image Search APIs to permit the user to search for the image of an art museum to set the background, for a musical playlist to set the aural space, and for an artist with work in the public domain (the limitation of the free Artsy API) or public domain artworks similar to the currently viewed artwork to create and browse a gallery for their own original experience.
 
 ### Thanks for reviewing my site! Please let me know where I can most improve.
 

@@ -17,7 +17,7 @@ const ErrorMessage = props => {
       innerContent = <span className="alert alert-info" role="alert">Sorry, something went wrong on collection retrieval.</span>;
       break;
     case 'artworks':
-      innerContent = <span className="alert alert-info" role="alert">Sorry, there are no available artworks from this artist.</span>;
+      innerContent = <span className="alert alert-info" role="alert">Sorry, there are no available artworks from this artist or similar to the current work.</span>;
       break;
     case 'museum':
       innerContent = <span className="alert alert-info" role="alert">Sorry, that museum couldn't be found.</span>;

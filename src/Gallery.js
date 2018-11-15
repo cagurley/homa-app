@@ -155,7 +155,8 @@ class Gallery extends Component {
         const title = artwork.title;
         const image_version = artwork.image_versions[0];
         const href = artwork._links.image.href.replace('{image_version}', image_version);
-        artworks.push({id, title, href});
+        const similar = artwork._links.similar_artworks.href;
+        artworks.push({id, title, href, similar});
       });
       if (status === 200 && artworks.length > 0) {
         this.setState(prevState => ({
@@ -177,8 +178,13 @@ class Gallery extends Component {
   // Disables search button to prevent spam and executes above functions to update state
   displayArtistArtworks() {
     const searchSubmit = document.getElementById('artist-submit');
+    const similar = document.getElementById('similar');
     searchSubmit.setAttribute('disabled', '');
-    Promise.resolve(setTimeout(() => searchSubmit.removeAttribute('disabled'), 1500));
+    similar.setAttribute('disabled', '');
+    Promise.resolve(setTimeout(() => {
+      searchSubmit.removeAttribute('disabled');
+      similar.removeAttribute('disabled');
+    }, 1500));
     this.setState(prevState => ({
       error: ''
     }));
@@ -227,6 +233,40 @@ class Gallery extends Component {
       });
   }
 
+  displayRelatedArtworks() {
+    const searchSubmit = document.getElementById('artist-submit');
+    const similar = document.getElementById('similar');
+    searchSubmit.setAttribute('disabled', '');
+    similar.setAttribute('disabled', '');
+    Promise.resolve(setTimeout(() => {
+      searchSubmit.removeAttribute('disabled');
+      similar.removeAttribute('disabled');
+    }, 1500));
+    this.setState(prevState => ({
+      error: ''
+    }));
+
+    let uri = this.state.collection.artworks[this.state.collection.currentIndex].similar;
+    const regex = /.*\/(.*?)$/;
+    uri = uri.match(regex)[1];
+    // console.log(uri);
+    return this.getToken()
+      .then(prevStatus => {
+        if (prevStatus === 201 || prevStatus === true) {
+          return this.setArtworks(this.state.token.string, uri);
+        } else if (prevStatus === 429) {
+          this.setState(prevState => ({
+            error: 'spam'
+          }));
+        } else {
+          this.setState({
+            error: 'token'
+          });
+        }
+        return false;
+      });
+  }
+
   // Handler to ultimately govern the behavior of ArtistSearch.
   // Regex replacement coerces a search into something recognizable
   // by the API.
@@ -245,6 +285,11 @@ class Gallery extends Component {
       }),
       () => this.displayArtistArtworks()
     );
+  }
+
+  showSimilarGallery = e => {
+    e.preventDefault();
+    this.displayRelatedArtworks();
   }
 
   // Handler for updating the current artwork being displayed based on Arrow clicks.
@@ -277,7 +322,8 @@ class Gallery extends Component {
       <div hidden={this.props.hidden} className="container-fluid">
         <ArtistSearch
           currentArtist={'/' + this.state.artist.name}
-          handleArtistUpdate={this.updateArtist} />
+          handleArtistUpdate={this.updateArtist}
+          handleSimilarGallery={this.showSimilarGallery} />
         <ErrorMessage
           error={this.state.error} />
         <Collection
