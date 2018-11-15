@@ -11,6 +11,7 @@ class Music extends Component {
     error: ''
   }
 
+  // Gets the most relevant playlist from /search endpoint with a query string.
   setMusic() {
     const getOptions = {
       method: 'GET'
@@ -51,6 +52,7 @@ class Music extends Component {
     });
   }
 
+  // Disables search button to prevent spam and executes above functions to update state
   searchMusic() {
     const searchSubmit = document.getElementById('music-submit');
     searchSubmit.setAttribute('disabled', '');
@@ -61,6 +63,9 @@ class Music extends Component {
     return this.setMusic();
   }
 
+  // Handler to ultimately govern the behavior of MuseumSearch.
+  // Regex replacement coerces a search into something recognizable
+  // by the API and appends '+music' to the value.
   updateQuery = e => {
     e.preventDefault();
     let query = document.getElementById('music-search').value;

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 
 class YTPlayer extends Component {
+  // The below global variable is used by the embedded script
+  // to check if the YT.Player obejct can be instantiated by
+  // the YouTube iframe API. Check ../public/embed.js for more.
   componentDidMount() {
     window.PlayerComponent = true;
   }

@@ -1,3 +1,34 @@
+# **HOMA, the Home Original Museum of Art**
+
+**PLEASE NOTE: The Bing API used for the background image search is not free, and my access (likely) will expire Sunday, November 18, 2018. Thus, please take care when testing to only submit a small number of requests; please contact me ASAP if you are a Code Louisville grader and find that the feature doesn't work.**
+
+## *Project Objective*
+
+This project was conceived as a way to make the art museum environment and the world's most notable works accessible to anyone with a computer. With this context, I further wanted to present the user with a synesthetic experience that one wouldn't find duplicated in a physical museum and that permits recontextualization of canonical artworks.
+
+## *Viewing Project*
+
+To run this application:
+
+* Download and install the recommended [node.js and npm bundle](https://nodejs.org), adding node commands to PATH
+* Run `npm i -g npm`
+* Open a git terminal and run `git clone https://github.com/cagurley/museum-app.git` in or download and unzip the project files to your desired directory
+* Open a console terminal, `cd` into the top level of the new project directory, and run `npm i` (this might take a while)
+* Create a file named `.env.local` in this top level of the directory with the appropriate values for API authentication; Code Louisville graders should be able to find these on the submission form
+* When complete, run `npm start` in the terminal; the project should open in your default web browser
+
+## *Notes on Functionality*
+
+This React application uses Artsy, YouTube, and Bing Image Search APIs to permit the user to search for the image of an art museum to set the background, for a musical playlist to set the aural space, and for an artist with work in the public domain (the limitation of the free Artsy API) to create and browse a gallery for their own original experience.
+
+### Thanks for reviewing my site! Please let me know where I can most improve.
+
+###### Website &copy; Colton Atticus Gurley
+
+*For more detailed instructions related to Create React App, please see their standard README documentation below.*
+
+------------------------------------------------------------------------------
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>

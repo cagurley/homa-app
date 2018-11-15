@@ -10,6 +10,7 @@ class Museum extends Component {
     error: ''
   }
 
+  // Gets from /images/search endpoint with a query string.
   setMuseum() {
     const getOptions = {
       method: 'GET',
@@ -44,6 +45,7 @@ class Museum extends Component {
     });
   }
 
+  // Disables search button to prevent spam and executes above functions to update state
   displayMuseum() {
     const searchSubmit = document.getElementById('museum-submit');
     searchSubmit.setAttribute('disabled', '');
@@ -54,6 +56,9 @@ class Museum extends Component {
     return this.setMuseum();
   }
 
+  // Handler to ultimately govern the behavior of MuseumSearch.
+  // Regex replacement coerces a search into something recognizable
+  // by the API and appends '+art+museum' to the value.
   updateQuery = e => {
     e.preventDefault();
     let query = document.getElementById('museum-search').value;

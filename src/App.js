@@ -26,6 +26,13 @@ class App extends Component {
     }));
   }
 
+  /*****
+  App is set to render Background at all times to maintain changes after Museum dismounts
+  Gallery and Music are always rendered to persist the music and current gallery contents when
+  navigating elsewhere. They remain hidden unless the appropriate path is accessed.
+  This always necessitates dummy values in the Switch component so that the NotFound
+  component isn't rendered inappropriately.
+  *****/
   render() {
     return (
       <BrowserRouter>

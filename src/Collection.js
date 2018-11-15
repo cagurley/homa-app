@@ -4,6 +4,7 @@ import Arrow from './Arrow';
 import Artwork from './Artwork';
 
 const Collection = props => {
+  // Three artworks are rendered at any given time.
   if (props.artworks.length !== 0) {
     let displayIndices = [
       props.cursor - 1,
@@ -15,9 +16,11 @@ const Collection = props => {
       'focus',
       'next d-none d-lg-block'
     ];
+
     let currentArtworks = props.artworks.filter(
       (artwork, index) => displayIndices.includes(index)
     );
+    // Below inserts empty dummies for proper display when viewing the first or last work.
     if (displayIndices[0] < 0) {
       currentArtworks.unshift({
         id: 'bookend-left',
@@ -32,9 +35,11 @@ const Collection = props => {
         href: null
       });
     }
+
     currentArtworks = currentArtworks.map((artwork, index) =>
       <Artwork key={artwork.id} title={artwork.title} source={artwork.href} className={displayClassNames[index] + (artwork.href ? '' : ' bookend')} />
     );
+
     return (
       <div className="container-fluid row">
         <Arrow
@@ -51,6 +56,8 @@ const Collection = props => {
       </div>
     );
   } else {
+    // As is, should only appear between app launch and the fetch resolution
+    // after Gallery mounts.
     return (
       <h3>Search for an artist to create your gallery. Artists with public domain work only, please.</h3>
     );

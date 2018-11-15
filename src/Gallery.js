@@ -227,6 +227,9 @@ class Gallery extends Component {
       });
   }
 
+  // Handler to ultimately govern the behavior of ArtistSearch.
+  // Regex replacement coerces a search into something recognizable
+  // by the API.
   updateArtist = e => {
     e.preventDefault();
     let artistName = document.getElementById('artist-search').value;
@@ -244,6 +247,7 @@ class Gallery extends Component {
     );
   }
 
+  // Handler for updating the current artwork being displayed based on Arrow clicks.
   updateCurrentIndex = lr => {
     if (lr === 'left') {
       this.setState(prevState => ({

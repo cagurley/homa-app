@@ -48,8 +48,9 @@ class Arrow extends Component {
     }
   }
 
+  // Actual styles are controlled by the class name; the 'disabled' attribute
+  // is just to illustrate the state if the DOM is peeked in devtools.
   render(props) {
-    // console.log('ARROW', this);
     return (
       <img
         id={this.props.id}
